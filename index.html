@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Japanese Verbs</title>
+<meta name="description" content="134 common Japanese verbs with every form in kanji, hiragana, rōmaji and English, plus a conjugation drill.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Verbs">
+<meta name="theme-color" content="#f3f4f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#12151c" media="(prefers-color-scheme: dark)">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}*,*::before,*::after{box-sizing:inherit}body{margin:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* Layout: companion to the N5 Kanji app. Card grid of verbs on writing-paper cells, filters on top, a sheet with every form. */
+:root{
+  --bg:#f3f4f6; --paper:#ffffff; --ink:#1b1f2a; --muted:#5d6475; --line:#d9dce4;
+  --ai:#24407a; --ai-soft:#e3e9f6; --kun:#8a3b12; --kun-soft:#f7e6dc; --matcha:#2f6b45; --matcha-soft:#e1efe5;
+  --good:#2d7a4c; --good-soft:#e3f2e8; --bad:#b3261e; --bad-soft:#fbe6e4;
+  --f-kanji:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12151c; --paper:#1a1e28; --ink:#eceef3; --muted:#9aa1b2; --line:#2c3242;
+  --ai:#9db5ec; --ai-soft:#232d47; --kun:#f0a983; --kun-soft:#3a271d; --matcha:#8fd1a6; --matcha-soft:#1d3326;
+  --good:#71c493; --good-soft:#1c3326; --bad:#f2887e; --bad-soft:#3b201e; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12151c; --paper:#1a1e28; --ink:#eceef3; --muted:#9aa1b2; --line:#2c3242;
+  --ai:#9db5ec; --ai-soft:#232d47; --kun:#f0a983; --kun-soft:#3a271d; --matcha:#8fd1a6; --matcha-soft:#1d3326;
+  --good:#71c493; --good-soft:#1c3326; --bad:#f2887e; --bad-soft:#3b201e; color-scheme:dark}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.wrap{max-width:1040px;margin:0 auto;padding-block:24px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+h1{font-family:var(--f-kanji);font-size:clamp(28px,6vw,40px);margin:0;letter-spacing:.02em;text-wrap:balance}
+h1 span{color:var(--ai)}
+.sub{color:var(--muted);margin:0;max-width:64ch}
+:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
+input,select{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:9px 12px;max-width:100%}
+
+/* tabs */
+.tabs{display:flex;gap:4px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:4px;align-self:flex-start;margin:6px 0 4px}
+.tab{font:inherit;font-weight:700;font-size:14px;border:0;background:none;color:var(--muted);border-radius:7px;padding:7px 18px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--ai);color:var(--paper)}
+
+.controls{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+#q{flex:1 1 240px;min-width:0}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font:inherit;font-size:13px;font-weight:500;border:1px solid var(--line);background:var(--paper);color:var(--muted);border-radius:999px;padding:5px 12px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ai);border-color:var(--ai);color:var(--paper)}
+.chip.g1[aria-pressed="true"]{background:var(--ai);border-color:var(--ai)}
+.chip.g2[aria-pressed="true"]{background:var(--kun);border-color:var(--kun)}
+.chip.g3[aria-pressed="true"]{background:var(--matcha);border-color:var(--matcha)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.legend span{display:flex;gap:6px;align-items:center}
+.count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* group tags */
+.gt{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.04em;border-radius:4px;padding:1px 6px;white-space:nowrap}
+.gt.g1{color:var(--ai);background:var(--ai-soft)}
+.gt.g2{color:var(--kun);background:var(--kun-soft)}
+.gt.g3{color:var(--matcha);background:var(--matcha-soft)}
+.gt.lv{color:var(--muted);background:var(--bg);border:1px solid var(--line)}
+
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+@media (max-width:420px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.card{font:inherit;color:inherit;text-align:left;cursor:pointer;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:12px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.card:hover{border-color:var(--ai)}
+.cell{position:relative;height:92px;border:1px solid var(--line);
+  background-image:linear-gradient(var(--line),var(--line));background-size:100% 1px;background-position:center;background-repeat:no-repeat;
+  display:grid;place-items:center;margin-bottom:4px;overflow:hidden}
+.vk{font-family:var(--f-kanji);font-weight:800;line-height:1;background:var(--paper);padding:0 4px;white-space:nowrap;font-size:clamp(30px,8vw,40px)}
+.vk.l4{font-size:clamp(26px,6.5vw,34px)}
+.vk.l5{font-size:clamp(21px,5.4vw,28px)}
+.cell .gt{position:absolute;top:4px;right:4px}
+.cell .lvc{position:absolute;top:4px;left:4px;right:auto}
+.en{font-size:14px;font-weight:700;overflow-wrap:anywhere}
+.kana{font-weight:500;font-size:15px;overflow-wrap:anywhere}
+.romaji{font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.masu{font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
+.masu b{font-weight:500;color:var(--ink)}
+.hint{font-size:11.5px;color:var(--ai);font-weight:500;margin-top:auto;padding-top:4px}
+.empty{color:var(--muted);padding:24px 0}
+
+/* sheet */
+.ov{position:fixed;inset:0;background:color-mix(in srgb,var(--ink) 45%,transparent);display:grid;place-items:center;z-index:20;
+  padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:10px;width:min(760px,100%);max-height:100%;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:16px}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.pv{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.pbig{font-family:var(--f-kanji);font-weight:800;font-size:clamp(34px,9vw,48px);line-height:1}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.btn{font:inherit;font-size:14px;font-weight:500;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:8px;padding:7px 14px;cursor:pointer}
+.btn:hover{border-color:var(--ai)}
+.btn.primary{background:var(--ai);color:var(--paper);border-color:var(--ai)}
+.btn:disabled{opacity:.45;cursor:default}
+.lbl{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.ex{border:1px solid var(--line);border-radius:6px;padding:12px;display:flex;flex-direction:column;gap:2px}
+.ex .jp{font-size:18px;font-weight:500}
+.notes{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.notes li{font-size:13.5px;background:var(--ai-soft);border-radius:6px;padding:8px 12px}
+.toggles{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--muted)}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+tbody tr:last-child>*{border-bottom:0}
+td.cat{background:var(--bg);font-family:var(--f-kanji);font-weight:800;color:var(--kun);font-size:14px}
+.fn{display:block;font-family:var(--f-kanji);font-weight:600;font-size:15px;white-space:nowrap}
+.fe{display:block;font-size:12px;color:var(--muted)}
+.rule{display:block;font-size:11.5px;color:var(--kun);margin-top:2px}
+.fk{display:block;font-size:17px;font-weight:500;white-space:nowrap}
+.fh{display:block;font-size:13px;color:var(--muted);white-space:nowrap}
+.fr{display:block;font-size:12.5px;color:var(--ai);white-space:nowrap}
+.fx{font-size:13px;min-width:10em}
+.fx2{display:none;font-size:13px;margin-top:3px}
+@media (max-width:560px){td.fx{display:none}.fx2{display:block}.fk,.fh,.fr{white-space:normal}}
+.na{color:var(--muted);font-size:13px}
+html.hide-kana .fh,html.hide-kana .kh{display:none}
+html.hide-romaji .fr,html.hide-romaji .kr{display:none}
+html.hide-en .fx,html.hide-en .fx2,html.hide-en .ke{display:none!important}
+.tg{font:inherit;font-size:12.5px;cursor:pointer;padding:3px 10px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.tg[aria-pressed="true"]{background:var(--ai-soft);border-color:var(--ai);color:var(--ai)}
+.tg[aria-pressed="false"]{text-decoration:line-through;color:var(--muted)}
+.pnav{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pnav #ppractise{grid-column:1/-1;order:-1}
+@media (min-width:600px){.pnav{grid-template-columns:auto 1fr auto}.pnav #ppractise{grid-column:2;order:0;justify-self:center}}
+
+/* drill */
+.dset{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:14px}
+.dset label{display:flex;flex-direction:column;gap:4px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;min-width:0}
+.dset select{text-transform:none;letter-spacing:0;font-weight:400;font-size:15px;width:100%}
+.score{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums;margin-bottom:10px}
+.score b{color:var(--ink);font-size:17px}
+.qcard{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.qv{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.qask{font-size:16px}
+.qask b{color:var(--kun)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.opt{font:inherit;color:var(--ink);text-align:left;cursor:pointer;padding:12px 14px;border-radius:8px;border:1px solid var(--line);background:var(--paper);display:flex;flex-direction:column;gap:2px;min-width:0}
+.opt:hover:not(:disabled){border-color:var(--ai)}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.fb{font-size:14.5px;min-height:1.5em}
+.fb.ok{color:var(--good)} .fb.no{color:var(--bad)}
+.missed{margin-top:18px;display:flex;flex-direction:column;gap:8px}
+.missed ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.missed li{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:8px 12px;font-size:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+.missed li .fk{font-size:16px}
+footer{margin-top:28px;font-size:13px;color:var(--muted);max-width:72ch}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Japanese Verbs <span>動詞</span></h1>
+    <p class="sub">134 common verbs with every form: polite and plain, negative, past, questions, て-form, potential, volitional, conditionals, passive and causative. Each form is shown in kanji, hiragana and rōmaji with an English meaning. Tap a verb for its full table and an example sentence.</p>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="t-verbs" aria-controls="v-verbs" aria-selected="true">Verbs</button>
+      <button class="tab" role="tab" id="t-drill" aria-controls="v-drill" aria-selected="false">Drill</button>
+    </div>
+  </header>
+
+  <section id="v-verbs" role="tabpanel" aria-labelledby="t-verbs">
+    <div class="controls">
+      <div class="row">
+        <input id="q" type="search" placeholder="Search verbs or forms, e.g. 食べた" aria-label="Search">
+        <select id="sort" aria-label="Sort">
+          <option value="topic">Sort: by topic</option>
+          <option value="kana">Sort: あいうえお order</option>
+          <option value="group">Sort: by verb group</option>
+        </select>
+      </div>
+      <div class="chips" id="topics" aria-label="Topic"></div>
+      <div class="chips" id="groups" aria-label="Verb group"></div>
+      <div class="legend"><span><span class="gt g1">Group 1</span>u-verbs (godan): the last kana changes row</span><span><span class="gt g2">Group 2</span>ru-verbs (ichidan): drop る</span><span><span class="gt g3">Group 3</span>irregular: する, 来る and their compounds</span></div>
+      <div class="count" id="count"></div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="v-drill" role="tabpanel" aria-labelledby="t-drill" hidden>
+    <div class="dset">
+      <label>Question type<select id="d-mode"><option value="make">Make the form</option><option value="name">Name the form</option><option value="mix">Mixed</option></select></label>
+      <label>Forms<select id="d-forms"></select></label>
+      <label>Verbs<select id="d-verbs"></select></label>
+    </div>
+    <div class="score" id="d-score"></div>
+    <div class="qcard" id="d-card" aria-live="polite"></div>
+    <div class="missed" id="d-missed" hidden><div class="lbl">To review</div><ul id="d-mlist"></ul></div>
+  </section>
+
+  <div class="ov" id="ov" hidden><div class="panel" role="dialog" aria-modal="true" aria-labelledby="pk" id="panel"></div></div>
+
+  <footer>Rōmaji uses modified Hepburn with long vowels written out (ou, uu). JLPT levels are approximate: the JLPT has published no official vocabulary list since 2010, so lists vary between textbooks. Forms marked “not normally used” are possible in grammar but sound unnatural for that verb.</footer>
+</div>
+
+<script>
+/* ---------- Verb data ----------
+   [kanji, kana, group, "base|past|participle|-ing", topic, JLPT level, flags, example [kanji, kana, romaji, English], overrides]
+   flags: i = intransitive, r = ている shows a resulting state, n = non-volitional (no requests, wishes or commands),
+          d = left out of the drill, -id = this form is not normally used */
+const TOPICS={M:"Movement",D:"Daily life",F:"Food & drink",C:"Communication",S:"Study & work",T:"Things & actions",G:"Giving & receiving",E:"Feelings & thinking",H:"Things that happen"};
+const RAW=[
+["行く","いく",1,"go|went|gone|going","M","N5","i r",["来週京都へ行きます。","らいしゅうきょうとへいきます。","Raishuu Kyouto e ikimasu.","I'm going to Kyoto next week."]],
+["来る","くる",3,"come|came|come|coming","M","N5","i r",["友だちが家に来ました。","ともだちがいえにきました。","Tomodachi ga ie ni kimashita.","A friend came to my house."]],
+["帰る","かえる",1,"go home|went home|gone home|going home","M","N5","i r",["六時に家に帰ります。","ろくじにいえにかえります。","Rokuji ni ie ni kaerimasu.","I go home at six."]],
+["歩く","あるく",1,"walk|walked|walked|walking","M","N5","i",["駅まで歩きましょう。","えきまであるきましょう。","Eki made arukimashou.","Let's walk to the station."]],
+["走る","はしる",1,"run|ran|run|running","M","N5","i",["毎朝公園を走ります。","まいあさこうえんをはしります。","Maiasa kouen o hashirimasu.","I run in the park every morning."]],
+["乗る","のる",1,"get on|got on|got on|getting on","M","N5","i",["あのバスに乗ってください。","あのバスにのってください。","Ano basu ni notte kudasai.","Please get on that bus."],{m:"ride; get on"}],
+["降りる","おりる",2,"get off|got off|got off|getting off","M","N5","i",["次の駅で降ります。","つぎのえきでおります。","Tsugi no eki de orimasu.","I get off at the next station."]],
+["乗り換える","のりかえる",2,"change trains|changed trains|changed trains|changing trains","M","N4","i",["新宿で乗り換えてください。","しんじゅくでのりかえてください。","Shinjuku de norikaete kudasai.","Please change trains at Shinjuku."]],
+["入る","はいる",1,"enter|entered|entered|entering","M","N5","i r",["部屋に入ってもいいですか。","へやにはいってもいいですか。","Heya ni haitte mo ii desu ka.","May I come into the room?"],{teiru:"be in (resulting state)"}],
+["出る","でる",2,"leave|left|left|leaving","M","N5","i r",["八時に家を出ました。","はちじにいえをでました。","Hachiji ni ie o demashita.","I left home at eight."],{m:"leave; go out"}],
+["出かける","でかける",2,"go out|went out|gone out|going out","M","N5","i r",["日曜日に家族と出かけます。","にちようびにかぞくとでかけます。","Nichiyoubi ni kazoku to dekakemasu.","I'm going out with my family on Sunday."]],
+["着く","つく",1,"arrive|arrived|arrived|arriving","M","N4","i r",["電車は十時に着きます。","でんしゃはじゅうじにつきます。","Densha wa juuji ni tsukimasu.","The train arrives at ten."]],
+["渡る","わたる",1,"cross|crossed|crossed|crossing","M","N5","i",["この橋を渡ってください。","このはしをわたってください。","Kono hashi o watatte kudasai.","Please cross this bridge."]],
+["曲がる","まがる",1,"turn|turned|turned|turning","M","N5","i",["次の角を右に曲がってください。","つぎのかどをみぎにまがってください。","Tsugi no kado o migi ni magatte kudasai.","Please turn right at the next corner."]],
+["戻る","もどる",1,"come back|came back|come back|coming back","M","N4","i r",["すぐ戻ります。","すぐもどります。","Sugu modorimasu.","I'll be right back."]],
+["止まる","とまる",1,"stop|stopped|stopped|stopping","M","N4","i r",["赤信号で止まってください。","あかしんごうでとまってください。","Aka shingou de tomatte kudasai.","Please stop at a red light."]],
+["泊まる","とまる",1,"stay overnight|stayed overnight|stayed overnight|staying overnight","M","N4","i",["今夜はホテルに泊まります。","こんやはホテルにとまります。","Kon'ya wa hoteru ni tomarimasu.","I'm staying at a hotel tonight."]],
+["急ぐ","いそぐ",1,"hurry|hurried|hurried|hurrying","M","N4","i",["急いでください。","いそいでください。","Isoide kudasai.","Please hurry."]],
+["泳ぐ","およぐ",1,"swim|swam|swum|swimming","M","N5","i",["夏は海で泳ぎます。","なつはうみでおよぎます。","Natsu wa umi de oyogimasu.","In summer I swim in the sea."]],
+["飛ぶ","とぶ",1,"fly|flew|flown|flying","M","N4","i",["鳥が空を飛んでいます。","とりがそらをとんでいます。","Tori ga sora o tonde imasu.","Birds are flying in the sky."]],
+["登る","のぼる",1,"climb|climbed|climbed|climbing","M","N5","",["富士山に登りたいです。","ふじさんにのぼりたいです。","Fujisan ni noboritai desu.","I want to climb Mount Fuji."]],
+["引っ越す","ひっこす",1,"move house|moved house|moved house|moving house","M","N4","i r",["来月東京に引っ越します。","らいげつとうきょうにひっこします。","Raigetsu Toukyou ni hikkoshimasu.","I'm moving to Tokyo next month."]],
+["運転する","うんてんする",3,"drive|drove|driven|driving","M","N4","",["父は毎日車を運転します。","ちちはまいにちくるまをうんてんします。","Chichi wa mainichi kuruma o unten shimasu.","My father drives every day."]],
+["旅行する","りょこうする",3,"travel|travelled|travelled|travelling","M","N4","i",["来年、日本を旅行したいです。","らいねん、にほんをりょこうしたいです。","Rainen, Nihon o ryokou shitai desu.","I want to travel around Japan next year."]],
+["散歩する","さんぽする",3,"take a walk|took a walk|taken a walk|taking a walk","M","N5","i",["毎朝犬と散歩します。","まいあさいぬとさんぽします。","Maiasa inu to sanpo shimasu.","I take a walk with the dog every morning."]],
+["持って来る","もってくる",3,"bring|brought|brought|bringing","M","N4","",["明日お弁当を持って来てください。","あしたおべんとうをもってきてください。","Ashita obentou o motte kite kudasai.","Please bring a packed lunch tomorrow."],{m:"bring (a thing)"}],
+["連れて来る","つれてくる",3,"bring along|brought along|brought along|bringing along","M","N4","",["パーティーに友だちを連れて来てもいいですか。","パーティーにともだちをつれてきてもいいですか。","Paatii ni tomodachi o tsurete kite mo ii desu ka.","May I bring a friend to the party?"],{m:"bring (a person)"}],
+
+["起きる","おきる",2,"get up|got up|got up|getting up","D","N5","i r",["毎朝六時に起きます。","まいあさろくじにおきます。","Maiasa rokuji ni okimasu.","I get up at six every morning."],{teiru:"be awake"}],
+["寝る","ねる",2,"go to bed|went to bed|gone to bed|going to bed","D","N5","i",["昨日は十一時に寝ました。","きのうはじゅういちじにねました。","Kinou wa juuichiji ni nemashita.","I went to bed at eleven last night."],{m:"sleep; go to bed",teiru:"be asleep"}],
+["洗う","あらう",1,"wash|washed|washed|washing","D","N5","",["食べる前に手を洗ってください。","たべるまえにてをあらってください。","Taberu mae ni te o aratte kudasai.","Please wash your hands before eating."]],
+["磨く","みがく",1,"brush|brushed|brushed|brushing","D","N4","",["寝る前に歯を磨きます。","ねるまえにはをみがきます。","Neru mae ni ha o migakimasu.","I brush my teeth before bed."],{m:"brush; polish"}],
+["浴びる","あびる",2,"take a shower|took a shower|taken a shower|taking a shower","D","N5","-pass",["朝シャワーを浴びます。","あさシャワーをあびます。","Asa shawaa o abimasu.","I take a shower in the morning."],{m:"take (a shower); bathe in"}],
+["着る","きる",2,"put on|put on|put on|putting on","D","N5","r",["今日は新しいシャツを着ています。","きょうはあたらしいシャツをきています。","Kyou wa atarashii shatsu o kite imasu.","I'm wearing a new shirt today."],{m:"wear (clothes on the body)",teiru:"be wearing"}],
+["履く","はく",1,"put on|put on|put on|putting on","D","N5","r",["靴を履いてください。","くつをはいてください。","Kutsu o haite kudasai.","Please put your shoes on."],{m:"wear (shoes, trousers)",teiru:"be wearing"}],
+["脱ぐ","ぬぐ",1,"take off|took off|taken off|taking off","D","N4","",["ここで靴を脱いでください。","ここでくつをぬいでください。","Koko de kutsu o nuide kudasai.","Please take off your shoes here."]],
+["住む","すむ",1,"live|lived|lived|living","D","N5","i",["姉は大阪に住んでいます。","あねはおおさかにすんでいます。","Ane wa Oosaka ni sunde imasu.","My older sister lives in Osaka."],{teiru:"live (somewhere)"}],
+["いる","いる",2,"be there|was there|been there|being there","D","N5","i -teiru -teimasu",["教室に学生が十人います。","きょうしつにがくせいがじゅうにんいます。","Kyoushitsu ni gakusei ga juunin imasu.","There are ten students in the classroom."],{m:"be, exist (people, animals)"}],
+["休む","やすむ","1","rest|rested|rested|resting","D","N5","i",["今日は会社を休みます。","きょうはかいしゃをやすみます。","Kyou wa kaisha o yasumimasu.","I'm taking the day off work today."],{m:"rest; take time off"}],
+["座る","すわる",1,"sit down|sat down|sat down|sitting down","D","N5","i r",["ここに座ってください。","ここにすわってください。","Koko ni suwatte kudasai.","Please sit here."],{teiru:"be sitting"}],
+["立つ","たつ",1,"stand up|stood up|stood up|standing up","D","N5","i r",["みんな立ってください。","みんなたってください。","Minna tatte kudasai.","Everyone, please stand up."],{teiru:"be standing"}],
+["遊ぶ","あそぶ",1,"play|played|played|playing","D","N5","i",["子どもたちが公園で遊んでいます。","こどもたちがこうえんであそんでいます。","Kodomotachi ga kouen de asonde imasu.","The children are playing in the park."],{m:"play; have fun"}],
+["待つ","まつ",1,"wait|waited|waited for|waiting","D","N5","",["駅で友だちを待っています。","えきでともだちをまっています。","Eki de tomodachi o matte imasu.","I'm waiting for a friend at the station."]],
+["する","する",3,"do|did|done|doing","D","N5","",["週末は何をしますか。","しゅうまつはなにをしますか。","Shuumatsu wa nani o shimasu ka.","What do you do at weekends?"]],
+["掃除する","そうじする",3,"clean|cleaned|cleaned|cleaning","D","N5","",["週末に部屋を掃除します。","しゅうまつにへやをそうじします。","Shuumatsu ni heya o souji shimasu.","I clean my room at the weekend."]],
+["洗濯する","せんたくする",3,"do the laundry|did the laundry|done the laundry|doing the laundry","D","N5","-pass",["毎日洗濯します。","まいにちせんたくします。","Mainichi sentaku shimasu.","I do the laundry every day."]],
+["結婚する","けっこんする",3,"get married|got married|got married|getting married","D","N4","i r",["兄は去年結婚しました。","あにはきょねんけっこんしました。","Ani wa kyonen kekkon shimashita.","My older brother got married last year."],{teiru:"be married"}],
+
+["食べる","たべる",2,"eat|ate|eaten|eating","F","N5","",["朝ごはんを食べましたか。","あさごはんをたべましたか。","Asagohan o tabemashita ka.","Did you eat breakfast?"]],
+["飲む","のむ",1,"drink|drank|drunk|drinking","F","N5","",["毎朝コーヒーを飲みます。","まいあさコーヒーをのみます。","Maiasa koohii o nomimasu.","I drink coffee every morning."],{m:"drink; take (medicine)"}],
+["作る","つくる",1,"make|made|made|making","F","N5","",["今晩カレーを作ります。","こんばんカレーをつくります。","Konban karee o tsukurimasu.","I'm making curry this evening."]],
+["料理する","りょうりする",3,"cook|cooked|cooked|cooking","F","N4","",["週末は家で料理します。","しゅうまつはいえでりょうりします。","Shuumatsu wa ie de ryouri shimasu.","At weekends I cook at home."]],
+["焼く","やく",1,"grill|grilled|grilled|grilling","F","N4","",["夕飯に魚を焼きました。","ゆうはんにさかなをやきました。","Yuuhan ni sakana o yakimashita.","I grilled fish for dinner."],{m:"grill; bake; toast"}],
+["切る","きる",1,"cut|cut|cut|cutting","F","N5","",["野菜を小さく切ってください。","やさいをちいさくきってください。","Yasai o chiisaku kitte kudasai.","Please cut the vegetables into small pieces."]],
+["吸う","すう",1,"smoke|smoked|smoked|smoking","F","N5","",["ここでたばこを吸わないでください。","ここでたばこをすわないでください。","Koko de tabako o suwanaide kudasai.","Please don't smoke here."],{m:"smoke; breathe in"}],
+["頼む","たのむ",1,"order|ordered|ordered|ordering","F","N4","",["ピザを頼みましょう。","ピザをたのみましょう。","Piza o tanomimashou.","Let's order a pizza."],{m:"order; ask for"}],
+
+["話す","はなす",1,"speak|spoke|spoken|speaking","C","N5","",["日本語で話してください。","にほんごではなしてください。","Nihongo de hanashite kudasai.","Please speak in Japanese."]],
+["言う","いう",1,"say|said|said|saying","C","N5","",["「ありがとう」と言いました。","「ありがとう」といいました。","\"Arigatou\" to iimashita.","I said \"thank you\"."]],
+["聞く","きく",1,"listen|listened|listened to|listening","C","N5","",["毎晩音楽を聞きます。","まいばんおんがくをききます。","Maiban ongaku o kikimasu.","I listen to music every evening."],{m:"listen; hear; ask"}],
+["書く","かく",1,"write|wrote|written|writing","C","N5","",["友だちに手紙を書きました。","ともだちにてがみをかきました。","Tomodachi ni tegami o kakimashita.","I wrote a letter to a friend."]],
+["答える","こたえる",2,"answer|answered|answered|answering","C","N5","",["質問に答えてください。","しつもんにこたえてください。","Shitsumon ni kotaete kudasai.","Please answer the question."]],
+["呼ぶ","よぶ",1,"call|called|called|calling","C","N4","",["タクシーを呼びましょうか。","タクシーをよびましょうか。","Takushii o yobimashou ka.","Shall I call a taxi?"]],
+["電話する","でんわする",3,"phone|phoned|phoned|phoning","C","N5","",["後で電話します。","あとででんわします。","Ato de denwa shimasu.","I'll phone you later."]],
+["説明する","せつめいする",3,"explain|explained|explained|explaining","C","N4","",["もう一度説明してください。","もういちどせつめいしてください。","Mou ichido setsumei shite kudasai.","Please explain once more."]],
+["質問する","しつもんする",3,"ask a question|asked a question|asked|asking a question","C","N4","i",["質問してもいいですか。","しつもんしてもいいですか。","Shitsumon shite mo ii desu ka.","May I ask a question?"]],
+["歌う","うたう",1,"sing|sang|sung|singing","C","N5","",["カラオケで歌いませんか。","カラオケでうたいませんか。","Karaoke de utaimasen ka.","Shall we sing at karaoke?"]],
+["会う","あう",1,"meet|met|met|meeting","C","N5","i",["明日先生に会います。","あしたせんせいにあいます。","Ashita sensei ni aimasu.","I'm meeting my teacher tomorrow."]],
+["見せる","みせる",2,"show|showed|shown|showing","C","N5","",["パスポートを見せてください。","パスポートをみせてください。","Pasupooto o misete kudasai.","Please show me your passport."]],
+["誘う","さそう",1,"invite|invited|invited|inviting","C","N4","",["友だちを映画に誘いました。","ともだちをえいがにさそいました。","Tomodachi o eiga ni sasoimashita.","I invited a friend to a film."]],
+
+["勉強する","べんきょうする",3,"study|studied|studied|studying","S","N5","",["毎日二時間勉強します。","まいにちにじかんべんきょうします。","Mainichi nijikan benkyou shimasu.","I study for two hours every day."]],
+["読む","よむ",1,"read|read|read|reading","S","N5","",["電車で本を読みます。","でんしゃでほんをよみます。","Densha de hon o yomimasu.","I read books on the train."]],
+["習う","ならう",1,"learn|learned|learned|learning","S","N5","",["ピアノを習っています。","ピアノをならっています。","Piano o naratte imasu.","I'm learning the piano."],{m:"learn (from a teacher)"}],
+["教える","おしえる",2,"teach|taught|taught|teaching","S","N5","",["姉は高校で英語を教えています。","あねはこうこうでえいごをおしえています。","Ane wa koukou de eigo o oshiete imasu.","My sister teaches English at a high school."],{m:"teach; tell"}],
+["覚える","おぼえる",2,"memorise|memorised|memorised|memorising","S","N5","r",["新しい漢字を覚えました。","あたらしいかんじをおぼえました。","Atarashii kanji o oboemashita.","I memorised the new kanji."],{m:"memorise; remember",teiru:"remember"}],
+["忘れる","わすれる",2,"forget|forgot|forgotten|forgetting","S","N5","r",["宿題を忘れました。","しゅくだいをわすれました。","Shukudai o wasuremashita.","I forgot my homework."]],
+["分かる","わかる",1,"understand|understood|understood|understanding","S","N5","i r -pot -potneg -pass -caus -vol -imp -negimp -mashou -mashouka -masenka",["日本語が少し分かります。","にほんごがすこしわかります。","Nihongo ga sukoshi wakarimasu.","I understand a little Japanese."],{teiru:"understand (now)"}],
+["知る","しる",1,"get to know|got to know|known|getting to know","S","N4","r -pot -potneg -vol -imp -negimp -mashou -mashouka -masenka -tekudasai -naidekudasai",["田中さんを知っていますか。","たなかさんをしっていますか。","Tanaka-san o shitte imasu ka.","Do you know Mr Tanaka?"],{m:"know; find out",teiru:"know",masen:"don't know (polite: 知りません)"}],
+["考える","かんがえる",2,"think about|thought about|thought about|thinking about","S","N4","",["ちょっと考えさせてください。","ちょっとかんがえさせてください。","Chotto kangaesasete kudasai.","Please let me think about it for a moment."],{m:"think; consider"}],
+["調べる","しらべる",2,"look up|looked up|looked up|looking up","S","N4","",["辞書で言葉を調べます。","じしょでことばをしらべます。","Jisho de kotoba o shirabemasu.","I look up words in the dictionary."],{m:"look up; investigate"}],
+["練習する","れんしゅうする",3,"practise|practised|practised|practising","S","N4","",["毎日漢字を練習します。","まいにちかんじをれんしゅうします。","Mainichi kanji o renshuu shimasu.","I practise kanji every day."]],
+["働く","はたらく",1,"work|worked|worked|working","S","N5","i",["銀行で働いています。","ぎんこうではたらいています。","Ginkou de hataraite imasu.","I work at a bank."]],
+["始める","はじめる",2,"begin|began|begun|beginning","S","N4","",["では、授業を始めましょう。","では、じゅぎょうをはじめましょう。","Dewa, jugyou o hajimemashou.","Right, let's begin the lesson."],{m:"begin (something)"}],
+["手伝う","てつだう",1,"help|helped|helped|helping","S","N4","",["母の料理を手伝いました。","ははのりょうりをてつだいました。","Haha no ryouri o tetsudaimashita.","I helped my mother with the cooking."]],
+["間違える","まちがえる",2,"get wrong|got wrong|got wrong|getting wrong","S","N4","",["道を間違えました。","みちをまちがえました。","Michi o machigaemashita.","I took the wrong road."],{m:"make a mistake; get wrong"}],
+["決める","きめる",2,"decide|decided|decided|deciding","S","N4","",["旅行の日を決めましょう。","りょこうのひをきめましょう。","Ryokou no hi o kimemashou.","Let's decide the date of the trip."]],
+["頑張る","がんばる",1,"try hard|tried hard|tried hard|trying hard","S","N4","i -pass",["試験、頑張ってください。","しけん、がんばってください。","Shiken, ganbatte kudasai.","Good luck with your exam. (lit. Please try hard.)"],{m:"do one's best; try hard"}],
+["できる","できる",2,"be able to|was able to|been able to|being able to","S","N5","i n -teiru -teimasu",["日本語ができますか。","にほんごができますか。","Nihongo ga dekimasu ka.","Can you speak Japanese?"],{m:"can do; be able to; be ready",masuka:"Can you (do it)?"}],
+
+["買う","かう",1,"buy|bought|bought|buying","T","N5","",["スーパーで牛乳を買いました。","スーパーでぎゅうにゅうをかいました。","Suupaa de gyuunyuu o kaimashita.","I bought milk at the supermarket."]],
+["売る","うる",1,"sell|sold|sold|selling","T","N4","",["この店では古い本を売っています。","このみせではふるいほんをうっています。","Kono mise de wa furui hon o utte imasu.","This shop sells old books."]],
+["持つ","もつ",1,"hold|held|held|holding","T","N5","",["傘を持っていますか。","かさをもっていますか。","Kasa o motte imasu ka.","Do you have an umbrella?"],{m:"hold; carry; have",teiru:"have, own"}],
+["取る","とる",1,"take|took|taken|taking","T","N5","",["塩を取ってください。","しおをとってください。","Shio o totte kudasai.","Please pass the salt."],{m:"take; pick up; pass"}],
+["撮る","とる",1,"take (a photo)|took|taken|taking","T","N5","",["写真を撮ってもいいですか。","しゃしんをとってもいいですか。","Shashin o totte mo ii desu ka.","May I take a photo?"]],
+["置く","おく",1,"put|put|put|putting","T","N5","",["鍵は机の上に置きました。","かぎはつくえのうえにおきました。","Kagi wa tsukue no ue ni okimashita.","I put the key on the desk."]],
+["開ける","あける",2,"open|opened|opened|opening","T","N5","",["窓を開けてもいいですか。","まどをあけてもいいですか。","Mado o akete mo ii desu ka.","May I open the window?"]],
+["閉める","しめる",2,"close|closed|closed|closing","T","N5","",["ドアを閉めてください。","ドアをしめてください。","Doa o shimete kudasai.","Please close the door."]],
+["つける","つける",2,"turn on|turned on|turned on|turning on","T","N5","",["電気をつけてください。","でんきをつけてください。","Denki o tsukete kudasai.","Please turn on the light."]],
+["消す","けす",1,"turn off|turned off|turned off|turning off","T","N5","",["テレビを消してください。","テレビをけしてください。","Terebi o keshite kudasai.","Please turn off the TV."],{m:"turn off; erase"}],
+["入れる","いれる",2,"put in|put in|put in|putting in","T","N5","",["コーヒーに砂糖を入れますか。","コーヒーにさとうをいれますか。","Koohii ni satou o iremasu ka.","Do you take sugar in your coffee?"]],
+["出す","だす",1,"take out|took out|taken out|taking out","T","N5","",["宿題を出してください。","しゅくだいをだしてください。","Shukudai o dashite kudasai.","Please hand in your homework."],{m:"take out; hand in; send"}],
+["探す","さがす",1,"look for|looked for|looked for|looking for","T","N4","",["鍵を探しています。","かぎをさがしています。","Kagi o sagashite imasu.","I'm looking for my keys."]],
+["見つける","みつける",2,"find|found|found|finding","T","N4","",["いいレストランを見つけました。","いいレストランをみつけました。","Ii resutoran o mitsukemashita.","I found a good restaurant."]],
+["運ぶ","はこぶ",1,"carry|carried|carried|carrying","T","N4","",["この箱を運んでください。","このはこをはこんでください。","Kono hako o hakonde kudasai.","Please carry this box."]],
+["押す","おす",1,"push|pushed|pushed|pushing","T","N5","",["このボタンを押してください。","このボタンをおしてください。","Kono botan o oshite kudasai.","Please press this button."],{m:"push; press"}],
+["引く","ひく",1,"pull|pulled|pulled|pulling","T","N5","",["ドアを引いてください。","ドアをひいてください。","Doa o hiite kudasai.","Please pull the door."]],
+["弾く","ひく",1,"play (an instrument)|played|played|playing","T","N4","",["毎晩ギターを弾きます。","まいばんギターをひきます。","Maiban gitaa o hikimasu.","I play the guitar every evening."]],
+["なくす","なくす",1,"lose|lost|lost|losing","T","N4","",["財布をなくしました。","さいふをなくしました。","Saifu o nakushimashita.","I lost my wallet."]],
+["選ぶ","えらぶ",1,"choose|chose|chosen|choosing","T","N4","",["好きな色を選んでください。","すきないろをえらんでください。","Suki na iro o erande kudasai.","Please choose a colour you like."]],
+["使う","つかう",1,"use|used|used|using","T","N5","",["このペンを使ってもいいですか。","このペンをつかってもいいですか。","Kono pen o tsukatte mo ii desu ka.","May I use this pen?"]],
+["並ぶ","ならぶ",1,"line up|lined up|lined up|lining up","T","N4","i r",["店の前に人が並んでいます。","みせのまえにひとがならんでいます。","Mise no mae ni hito ga narande imasu.","People are queuing in front of the shop."],{m:"line up; queue",teiru:"be in a line"}],
+
+["あげる","あげる",2,"give|gave|given|giving","G","N5","",["妹に誕生日プレゼントをあげました。","いもうとにたんじょうびプレゼントをあげました。","Imouto ni tanjoubi purezento o agemashita.","I gave my younger sister a birthday present."],{m:"give (to someone else)"}],
+["もらう","もらう",1,"receive|received|received|receiving","G","N5","-imp -negimp",["友だちから花をもらいました。","ともだちからはなをもらいました。","Tomodachi kara hana o moraimashita.","I received flowers from a friend."]],
+["貸す","かす",1,"lend|lent|lent|lending","G","N5","",["友だちに本を貸しました。","ともだちにほんをかしました。","Tomodachi ni hon o kashimashita.","I lent a book to a friend."]],
+["借りる","かりる",2,"borrow|borrowed|borrowed|borrowing","G","N5","",["図書館で本を借ります。","としょかんでほんをかります。","Toshokan de hon o karimasu.","I borrow books from the library."]],
+["返す","かえす",1,"give back|gave back|given back|giving back","G","N4","",["明日本を返します。","あしたほんをかえします。","Ashita hon o kaeshimasu.","I'll return the book tomorrow."],{m:"return; give back"}],
+["払う","はらう",1,"pay|paid|paid|paying","G","N4","",["カードで払えますか。","カードではらえますか。","Kaado de haraemasu ka.","Can I pay by card?"]],
+["送る","おくる",1,"send|sent|sent|sending","G","N4","",["写真をメールで送ります。","しゃしんをメールでおくります。","Shashin o meeru de okurimasu.","I'll send the photos by email."]],
+
+["見る","みる",2,"see|saw|seen|seeing","E","N5","",["昨日の夜、映画を見ました。","きのうのよる、えいがをみました。","Kinou no yoru, eiga o mimashita.","I watched a film last night."],{m:"see; look; watch",teiru:"be watching"}],
+["思う","おもう",1,"think|thought|thought|thinking","E","N4","-pot -potneg -imp -negimp",["明日は雨が降ると思います。","あしたはあめがふるとおもいます。","Ashita wa ame ga furu to omoimasu.","I think it will rain tomorrow."]],
+["笑う","わらう",1,"laugh|laughed|laughed at|laughing","E","N4","",["赤ちゃんが笑っています。","あかちゃんがわらっています。","Akachan ga waratte imasu.","The baby is laughing."]],
+["泣く","なく",1,"cry|cried|cried|crying","E","N4","i",["子どもが泣いています。","こどもがないています。","Kodomo ga naite imasu.","A child is crying."]],
+["怒る","おこる",1,"get angry|got angry|got angry|getting angry","E","N4","i",["父はとても怒っています。","ちちはとてもおこっています。","Chichi wa totemo okotte imasu.","My father is very angry."],{teiru:"be angry",pass:"be told off"}],
+["喜ぶ","よろこぶ",1,"be pleased|was pleased|been pleased|being pleased","E","N4","i -pot -potneg -vol -imp -negimp -mashou -mashouka -masenka -tekudasai -naidekudasai -tai -takunai",["母はとても喜びました。","はははとてもよろこびました。","Haha wa totemo yorokobimashita.","My mother was very pleased."],{teiru:"be delighted",pass:"be appreciated",caus:"make (someone) happy"}],
+["困る","こまる",1,"be in trouble|was in trouble|been in trouble|being in trouble","E","N4","i -pot -potneg -vol -imp -negimp -mashou -mashouka -masenka -tekudasai -naidekudasai -tai -takunai -pass",["道が分からなくて困っています。","みちがわからなくてこまっています。","Michi ga wakaranakute komatte imasu.","I don't know the way and I'm stuck."],{m:"be in trouble; be stuck",teiru:"be stuck",caus:"cause (someone) trouble"}],
+["心配する","しんぱいする",3,"worry|worried|worried about|worrying","E","N4","",["心配しないでください。","しんぱいしないでください。","Shinpai shinaide kudasai.","Please don't worry."]],
+["楽しむ","たのしむ",1,"enjoy|enjoyed|enjoyed|enjoying","E","N4","",["旅行を楽しんでください。","りょこうをたのしんでください。","Ryokou o tanoshinde kudasai.","Enjoy your trip."]],
+["疲れる","つかれる",2,"get tired|got tired|got tired|getting tired","E","N4","i n",["今日はとても疲れました。","きょうはとてもつかれました。","Kyou wa totemo tsukaremashita.","I'm very tired today."],{teiru:"be tired"}],
+["遅れる","おくれる",2,"be late|was late|been late|being late","E","N4","i n",["すみません、少し遅れます。","すみません、すこしおくれます。","Sumimasen, sukoshi okuremasu.","Sorry, I'll be a little late."],{teiru:"be running late"}],
+
+["降る","ふる",1,"fall|fell|fallen|falling","H","N5","i -pot -potneg -vol -imp -negimp -mashou -mashouka -masenka -tekudasai -naidekudasai -tai -takunai -caus",["雨が降っています。","あめがふっています。","Ame ga futte imasu.","It's raining."],{m:"fall (rain, snow)",teiru:"be raining / snowing",pass:"be caught in (the rain, snow)"}],
+["始まる","はじまる",1,"begin|began|begun|beginning","H","N4","i n r",["授業は九時に始まります。","じゅぎょうはくじにはじまります。","Jugyou wa kuji ni hajimarimasu.","Class begins at nine."],{m:"begin (by itself)",teiru:"have begun"}],
+["終わる","おわる",1,"end|ended|ended|ending","H","N5","i r -pot -potneg -vol -imp -negimp -mashou -mashouka -masenka -tekudasai -naidekudasai -tai -takunai -pass",["会議は五時に終わりました。","かいぎはごじにおわりました。","Kaigi wa goji ni owarimashita.","The meeting ended at five."],{m:"end; finish",teiru:"be over",caus:"finish (something) off"}],
+["開く","あく",1,"open|opened|opened|opening","H","N5","i n r",["銀行は九時に開きます。","ぎんこうはくじにあきます。","Ginkou wa kuji ni akimasu.","The bank opens at nine."],{m:"open (by itself)",teiru:"be open"}],
+["閉まる","しまる",1,"close|closed|closed|closing","H","N5","i n r",["店は八時に閉まります。","みせははちじにしまります。","Mise wa hachiji ni shimarimasu.","The shop closes at eight."],{m:"close (by itself)",teiru:"be closed"}],
+["見える","みえる",2,"be visible|was visible|been visible|being visible","H","N4","i n",["窓から海が見えます。","まどからうみがみえます。","Mado kara umi ga miemasu.","You can see the sea from the window."],{m:"can be seen; be visible",teiru:"be in view"}],
+["聞こえる","きこえる",2,"be audible|was audible|been audible|being audible","H","N4","i n",["どこかから音楽が聞こえます。","どこかからおんがくがきこえます。","Dokoka kara ongaku ga kikoemasu.","I can hear music from somewhere."],{m:"can be heard; be audible",teiru:"be audible"}],
+["生まれる","うまれる",2,"be born|was born|been born|being born","D","N4","i n -teiru -teimasu -masuka -plainq",["私は東京で生まれました。","わたしはとうきょうでうまれました。","Watashi wa Toukyou de umaremashita.","I was born in Tokyo."]],
+["死ぬ","しぬ",1,"die|died|died|dying","D","N4","i r d",["祖父は去年死にました。","そふはきょねんしにました。","Sofu wa kyonen shinimashita.","My grandfather died last year."],{m:"die (the only verb ending in ぬ)"}],
+];
+const NV=["pot","potneg","vol","imp","negimp","tai","takunai","mashou","mashouka","masenka","tekudasai","naidekudasai","pass","caus"];
+const VERBS=RAW.map(([k,h,g,e,t,l,fl,ex,o])=>{
+  const f=fl.split(/\s+/).filter(Boolean),skip=new Set(f.filter(x=>x[0]==="-").map(x=>x.slice(1)));
+  if(f.includes("n"))NV.forEach(x=>skip.add(x));
+  o=Object.assign({},o||{});if(o.teiru&&!o.teimasu)o.teimasu=o.teiru+" (polite)";
+  return {k,h,g:+g,e:e.split("|"),t,l,intr:f.includes("i"),res:f.includes("r"),noDrill:f.includes("d"),it:t==="H",skip,o,ex};
+});
+const ROW={"う":"わいえお","く":"かきけこ","ぐ":"がぎげご","す":"さしせそ","つ":"たちてと","ぬ":"なにねの","ぶ":"ばびべぼ","む":"まみめも","る":"らりれろ"};
+const GROUP={1:"Group 1 · godan (u-verb)",2:"Group 2 · ichidan (ru-verb)",3:"Group 3 · irregular"};
+const GSHORT={1:"Group 1",2:"Group 2",3:"Group 3"};
+
+/* ---------- Romaji ---------- */
+const K={あ:"a",い:"i",う:"u",え:"e",お:"o",か:"ka",き:"ki",く:"ku",け:"ke",こ:"ko",が:"ga",ぎ:"gi",ぐ:"gu",げ:"ge",ご:"go",さ:"sa",し:"shi",す:"su",せ:"se",そ:"so",ざ:"za",じ:"ji",ず:"zu",ぜ:"ze",ぞ:"zo",た:"ta",ち:"chi",つ:"tsu",て:"te",と:"to",だ:"da",ぢ:"ji",づ:"zu",で:"de",ど:"do",な:"na",に:"ni",ぬ:"nu",ね:"ne",の:"no",は:"ha",ひ:"hi",ふ:"fu",へ:"he",ほ:"ho",ば:"ba",び:"bi",ぶ:"bu",べ:"be",ぼ:"bo",ぱ:"pa",ぴ:"pi",ぷ:"pu",ぺ:"pe",ぽ:"po",ま:"ma",み:"mi",む:"mu",め:"me",も:"mo",や:"ya",ゆ:"yu",よ:"yo",ら:"ra",り:"ri",る:"ru",れ:"re",ろ:"ro",わ:"wa",を:"o",ん:"n","？":"?","、":","};
+function toR(s){
+  const out=[];
+  for(let i=0;i<s.length;i++){
+    const c=s[i],n=s[i+1];
+    if(c==="っ"){out.push("~");continue}
+    if(n&&"ゃゅょ".includes(n)&&K[c]){const r=K[c],v={"ゃ":"a","ゅ":"u","ょ":"o"}[n];out.push(/^(shi|chi|ji)$/.test(r)?r.slice(0,-1)+v:r.slice(0,-1)+"y"+v);i++;continue}
+    out.push(K[c]??c);
+  }
+  let res="";
+  for(let i=0;i<out.length;i++){
+    let x=out[i];const nx=out[i+1]||"";
+    if(x==="~"){res+=nx.startsWith("ch")?"t":(nx[0]||"");continue}
+    if(x==="n"&&/^[aiueoy]/.test(nx))x="n'";
+    res+=x;
+  }
+  return res;
+}
+
+/* ---------- Conjugation engine ---------- */
+function bases(v){
+  if(v.g===1){
+    const l=v.h.slice(-1),r=ROW[l];
+    const te=l==="く"?(v.h.endsWith("いく")&&v.k.endsWith("行く")?"って":"いて"):l==="ぐ"?"いで":l==="す"?"して":"うつる".includes(l)?"って":"んで";
+    return {u:l,i:r[1],a:r[0],o:r[3]+"う",te,ta:te.replace("て","た").replace("で","だ"),pot:r[2]+"る",imp:r[2],ba:r[2]+"ば",pass:r[0]+"れる",caus:r[0]+"せる"};
+  }
+  if(v.g===2)return {u:"る",i:"",a:"",o:"よう",te:"て",ta:"た",pot:"られる",imp:"ろ",ba:"れば",pass:"られる",caus:"させる"};
+  if(v.h.endsWith("くる"))return {u:"くる",i:"き",a:"こ",o:"こよう",te:"きて",ta:"きた",pot:"こられる",imp:"こい",ba:"くれば",pass:"こられる",caus:"こさせる"};
+  return {u:"する",i:"し",a:"し",o:"しよう",te:"して",ta:"した",pot:"できる",imp:"しろ",ba:"すれば",pass:"される",caus:"させる"};
+}
+const C=s=>s[0].toUpperCase()+s.slice(1);
+const isBe=e=>e[0].startsWith("be ");
+const bRest=e=>e[0].slice(3);
+const s3=s=>s.replace(/^(\S+)/,w=>/(s|sh|ch|x)$/.test(w)?w+"es":w+"s");
+const ifc=(e,v)=>isBe(e)?`${v.it?"it is":"you are"} ${bRest(e)}`:(v.it?"it "+s3(e[0]):"you "+e[0]);
+const ask=(e,v)=>isBe(e)?`${v.it?"Is it":"Are you"} ${bRest(e)}?`:`${v.it?"Does it":"Do you"} ${e[0]}?`;
+const FORMS=[
+ {id:"masu",cat:"Polite (〜ます)",jp:"〜ます",en:"Polite present / future",s:b=>[b.i+"ます"],gl:e=>`${e[0]}; will ${e[0]}`,g1:"-u → -i + ます",g2:"drop る + ます"},
+ {id:"masen",cat:"Polite (〜ます)",jp:"〜ません",en:"Polite negative",s:b=>[b.i+"ません"],gl:e=>isBe(e)?`not ${e[0]}; won't ${e[0]}`:`don't ${e[0]}; won't ${e[0]}`,g1:"-i + ません",g2:"drop る + ません"},
+ {id:"mashita",cat:"Polite (〜ます)",jp:"〜ました",en:"Polite past",s:b=>[b.i+"ました"],gl:e=>e[1],g1:"-i + ました",g2:"drop る + ました"},
+ {id:"masendeshita",cat:"Polite (〜ます)",jp:"〜ませんでした",en:"Polite past negative",s:b=>[b.i+"ません","でした"],gl:e=>isBe(e)?`wasn't ${bRest(e)}`:`didn't ${e[0]}`,g1:"-i + ませんでした",g2:"drop る + ませんでした"},
+ {id:"masuka",cat:"Questions & invitations",jp:"〜ますか",en:"Polite question",s:b=>[b.i+"ます","か"],gl:ask,g1:"ます form + か",g2:"ます form + か"},
+ {id:"masenka",cat:"Questions & invitations",jp:"〜ませんか",en:"Negative question / invitation",s:b=>[b.i+"ません","か"],gl:e=>`Won't you ${e[0]}? (invitation)`,g1:"ません form + か",g2:"ません form + か"},
+ {id:"mashou",cat:"Questions & invitations",jp:"〜ましょう",en:"Polite volitional",s:b=>[b.i+"ましょう"],gl:e=>`Let's ${e[0]}.`,g1:"-i + ましょう",g2:"drop る + ましょう"},
+ {id:"mashouka",cat:"Questions & invitations",jp:"〜ましょうか",en:"Offer / suggestion",s:b=>[b.i+"ましょう","か"],gl:e=>`Shall we ${e[0]}? / Shall I ${e[0]}?`,g1:"ましょう + か",g2:"ましょう + か"},
+ {id:"plainq",cat:"Questions & invitations",jp:"〜の？",en:"Casual question",s:b=>[b.u,"の？"],gl:(e,v)=>`${ask(e,v)} (casual)`,g1:"dictionary form + の？",g2:"dictionary form + の？"},
+ {id:"dict",cat:"Plain (dictionary) forms",jp:"辞書形",en:"Plain present",s:b=>[b.u],gl:e=>`${e[0]}; will ${e[0]} (plain)`,g1:"ends in -u",g2:"ends in -iru / -eru"},
+ {id:"nai",cat:"Plain (dictionary) forms",jp:"〜ない",en:"Plain negative",s:b=>[b.a+"ない"],gl:e=>isBe(e)?`not ${e[0]} (plain)`:`don't ${e[0]} (plain)`,g1:"-u → -a + ない (う → わ)",g2:"drop る + ない"},
+ {id:"ta",cat:"Plain (dictionary) forms",jp:"〜た",en:"Plain past",s:b=>[b.ta],gl:e=>`${e[1]} (plain)`,g1:"sound-change chart",g2:"drop る + た"},
+ {id:"nakatta",cat:"Plain (dictionary) forms",jp:"〜なかった",en:"Plain past negative",s:b=>[b.a+"なかった"],gl:e=>isBe(e)?`wasn't ${bRest(e)} (plain)`:`didn't ${e[0]} (plain)`,g1:"-a + なかった",g2:"drop る + なかった"},
+ {id:"te",cat:"て-form & requests",jp:"〜て",en:"て-form (linking)",s:b=>[b.te],gl:e=>`${e[0]} and… (linking form)`,g1:"sound-change chart",g2:"drop る + て"},
+ {id:"teiru",cat:"て-form & requests",jp:"〜ている",en:"Progressive / state",s:b=>[b.te,"いる"],gl:(e,v)=>v.res?`have ${e[2]} (resulting state)`:`be ${e[3]}`,g1:"て form + いる",g2:"て form + いる"},
+ {id:"teimasu",cat:"て-form & requests",jp:"〜ています",en:"Polite progressive / state",s:b=>[b.te,"います"],gl:(e,v)=>v.res?`have ${e[2]} (resulting state, polite)`:`be ${e[3]} (polite)`,g1:"て form + います",g2:"て form + います"},
+ {id:"tekudasai",cat:"て-form & requests",jp:"〜てください",en:"Polite request",s:b=>[b.te,"ください"],gl:e=>`Please ${e[0]}.`,g1:"て form + ください",g2:"て form + ください"},
+ {id:"naidekudasai",cat:"て-form & requests",jp:"〜ないでください",en:"Negative request",s:b=>[b.a+"ないで","ください"],gl:e=>`Please don't ${e[0]}.`,g1:"ない form + でください",g2:"ない form + でください"},
+ {id:"tai",cat:"Desire & ability",jp:"〜たい",en:"Desire",s:b=>[b.i+"たい"],gl:e=>`want to ${e[0]}`,g1:"-i + たい",g2:"drop る + たい"},
+ {id:"takunai",cat:"Desire & ability",jp:"〜たくない",en:"Negative desire",s:b=>[b.i+"たくない"],gl:e=>`don't want to ${e[0]}`,g1:"-i + たくない",g2:"drop る + たくない"},
+ {id:"pot",cat:"Desire & ability",jp:"可能形",en:"Potential",s:b=>[b.pot],gl:e=>`can ${e[0]}`,g1:"-u → -e + る",g2:"drop る + られる"},
+ {id:"potneg",cat:"Desire & ability",jp:"可能形・否定",en:"Potential negative",s:b=>[b.pot.slice(0,-1)+"ない"],gl:e=>`can't ${e[0]}`,g1:"-e + ない",g2:"drop る + られない"},
+ {id:"vol",cat:"Volition & commands",jp:"意向形",en:"Plain volitional",s:b=>[b.o],gl:e=>`Let's ${e[0]}. (casual)`,g1:"-u → -o + う",g2:"drop る + よう"},
+ {id:"imp",cat:"Volition & commands",jp:"命令形",en:"Imperative",s:b=>[b.imp],gl:e=>`${C(e[0])}! (blunt command)`,g1:"-u → -e",g2:"drop る + ろ"},
+ {id:"negimp",cat:"Volition & commands",jp:"禁止形",en:"Prohibitive",s:b=>[b.u+"な"],gl:e=>`Don't ${e[0]}! (blunt)`,g1:"dictionary form + な",g2:"dictionary form + な"},
+ {id:"ba",cat:"Conditionals",jp:"〜ば",en:"Conditional (ba)",s:b=>[b.ba],gl:(e,v)=>`if ${ifc(e,v)}`,g1:"-u → -e + ば",g2:"drop る + れば"},
+ {id:"tara",cat:"Conditionals",jp:"〜たら",en:"Conditional (tara)",s:b=>[b.ta+"ら"],gl:(e,v)=>`if / when ${ifc(e,v)}`,g1:"た form + ら",g2:"た form + ら"},
+ {id:"pass",cat:"Passive & causative",jp:"受身形",en:"Passive",s:b=>[b.pass],gl:(e,v)=>v.intr?`be affected by someone ${e[3]} (adversative)`:`be ${e[2]}`,g1:"-u → -a + れる (う → わ)",g2:"drop る + られる"},
+ {id:"caus",cat:"Passive & causative",jp:"使役形",en:"Causative",s:b=>[b.caus],gl:e=>`make / let (someone) ${e[0]}`,g1:"-u → -a + せる (う → わ)",g2:"drop る + させる"},
+];
+const F=Object.fromEntries(FORMS.map(f=>[f.id,f]));
+const usable=(v,f)=>!(v.skip&&v.skip.has(f.id));
+function conj(v,f){
+  const b=bases(v),segs=f.s(b),drop=v.g<3?1:2;
+  const root=v.h.slice(0,-drop),kroot=v.k.slice(0,-drop),first=segs[0],rest=segs.slice(1).join("");
+  const h=root+first+rest;
+  const k=(v.g===3&&v.h.endsWith("くる")?kroot+"来"+first.slice(1):kroot+first)+rest;
+  const r0=(v.g===3&&root)?toR(root)+" "+toR(first):toR(root+first);
+  const r=[r0,...segs.slice(1).map(toR)].join(" ");
+  const en=(v.o&&v.o[f.id])||f.gl(v.e,v);
+  return {h,k,r,en,skip:!usable(v,f)};
+}
+const meaning=v=>(v.o&&v.o.m)||v.e[0];
+const V=k=>VERBS.find(v=>v.k===k);
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+
+
+/* ---------- Helpers ---------- */
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const $=id=>document.getElementById(id);
+const norm=s=>String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[\s'"・]/g,"");
+const gt=g=>`<span class="gt g${g}">${GSHORT[g]}</span>`;
+const lenCls=k=>k.length>=5?"l5":k.length===4?"l4":"";
+VERBS.forEach((v,i)=>{v.i=i;v.dr=conj(v,F.dict).r;v.masu=conj(v,F.masu);
+  v.idx=norm([v.k,v.h,v.dr,meaning(v),v.e.join(" "),TOPICS[v.t],...FORMS.map(f=>{const c=conj(v,f);return c.k+" "+c.h+" "+c.r})].join(" "))});
+function notes(v){
+  const n=[];
+  if(v.g===1&&v.h.endsWith("る")&&/[ie]$/.test(toR(v.h.slice(-2,-1))))n.push("<b>Looks like Group 2, but it is Group 1.</b> The kana before る has an i or e sound, so check the ます form: "+v.masu.k+".");
+  if(v.k==="行く")n.push("<b>Exception:</b> the only く-verb whose て and た forms are 行って and 行った, not 行いて.");
+  if(v.k==="来る"||v.h.endsWith("てくる"))n.push("<b>来る changes its reading:</b> き in 来ます and 来て, こ in 来ない and 来よう, く in 来る and 来れば. The kanji stays the same.");
+  if(v.g===3&&v.h.endsWith("する"))n.push("<b>する verb:</b> only する conjugates. Its potential is できる"+(v.k==="する"?"":", so 「"+v.k.slice(0,-2)+"できる」")+".");
+  if(v.k==="知る")n.push("<b>Use 知っている for 'know'.</b> The negative is 知りません / 知らない, not 知っていません.");
+  if(v.k==="いる")n.push("<b>いる vs ある:</b> use いる for people and animals, ある for things and plants.");
+  if(v.k==="開く")n.push("<b>開く (あく) and 開ける (あける):</b> 開く is what the door does by itself; 開ける is what you do to it.");
+  if(v.g===2&&!v.skip.has("pot"))n.push("<b>Group 2 note:</b> the potential and the passive look the same ("+conj(v,F.pot).k+"). Context tells them apart.");
+  return n;
+}
+
+/* ---------- Browse ---------- */
+let topic=store.get("vb-topic")||"All",group=store.get("vb-group")||"All",list=[];
+if(topic!=="All"&&!TOPICS[topic])topic="All";
+function chipRow(el,items,cur,set,cls){
+  el.innerHTML=items.map(([val,label])=>`<button class="chip ${cls?cls(val):""}" data-v="${val}" aria-pressed="${val===cur}">${label}</button>`).join("");
+  el.onclick=e=>{const b=e.target.closest(".chip");if(!b)return;set(b.dataset.v);[...el.children].forEach(x=>x.setAttribute("aria-pressed",x===b));render()};
+}
+chipRow($("topics"),[["All","All topics"],...Object.entries(TOPICS)],topic,v=>{topic=v;store.set("vb-topic",v)});
+chipRow($("groups"),[["All","All groups"],["1","Group 1"],["2","Group 2"],["3","Group 3"]],group,v=>{group=v;store.set("vb-group",v)},v=>v==="All"?"":"g"+v);
+const q=$("q"),sort=$("sort");
+sort.value=store.get("vb-sort")||"topic";
+const TO=Object.keys(TOPICS);
+function render(){
+  const t=norm(q.value.trim());
+  list=VERBS.filter(v=>(topic==="All"||v.t===topic)&&(group==="All"||v.g==+group)&&(!t||v.idx.includes(t)));
+  const m=sort.value;
+  list.sort((a,b)=>m==="kana"?a.h.localeCompare(b.h,"ja"):m==="group"?a.g-b.g||a.h.localeCompare(b.h,"ja"):TO.indexOf(a.t)-TO.indexOf(b.t)||a.i-b.i);
+  $("count").textContent=list.length+" of "+VERBS.length+" verbs";
+  $("grid").innerHTML=list.length?list.map(v=>`<button class="card" data-i="${v.i}" aria-label="${v.k}, ${esc(meaning(v))}: show all forms">
+    <div class="cell"><span class="gt lv lvc">${v.l}</span>${gt(v.g)}<span class="vk ${lenCls(v.k)}" lang="ja">${v.k}</span></div>
+    <div class="en">${esc(meaning(v))}</div><span class="kana" lang="ja">${v.h}</span><span class="romaji">${v.dr}</span>
+    <span class="masu">ます: <b lang="ja">${v.masu.k}</b></span><div class="hint">All forms and example</div></button>`).join(""):`<p class="empty">No verbs match that search.</p>`;
+}
+q.addEventListener("input",render);sort.addEventListener("change",()=>{store.set("vb-sort",sort.value);render()});
+$("grid").addEventListener("click",e=>{const c=e.target.closest(".card");if(c)openV(+c.dataset.i)});
+
+/* ---------- Detail sheet ---------- */
+const ov=$("ov"),panel=$("panel");let cur=-1,lastFocus=null;
+function ruleFor(v,f){return v.g===1?f.g1:v.g===2?f.g2:"irregular"}
+function openV(i){
+  if(ov.hidden)lastFocus=document.activeElement;
+  cur=i;const v=VERBS[i],x=v.ex,pos=list.findIndex(y=>y.i===i);
+  let cat="",rows="";
+  FORMS.forEach(f=>{
+    if(f.cat!==cat){cat=f.cat;rows+=`<tr><td class="cat" colspan="3">${f.cat}</td></tr>`}
+    const c=conj(v,f);
+    rows+=`<tr><th><span class="fn" lang="ja">${f.jp}</span><span class="fe">${f.en}</span>${c.skip?"":`<span class="rule">${ruleFor(v,f)}</span>`}</th>`+
+      (c.skip?`<td colspan="2" class="na">Not normally used with this verb.</td>`:`<td><span class="fk" lang="ja">${c.k}</span><span class="fh" lang="ja">${c.h}</span><span class="fr">${c.r}</span><span class="fx2">${esc(c.en)}</span></td><td class="fx">${esc(c.en)}</td>`)+`</tr>`;
+  });
+  const nt=notes(v);
+  panel.innerHTML=`<div class="ph"><div><div class="pv"><span class="pbig" id="pk" lang="ja">${v.k}</span><div><div class="kana" lang="ja">${v.h}</div><div class="romaji">${v.dr}</div><div class="en">to ${esc(meaning(v))}</div></div></div>
+    <div class="tags">${gt(v.g)}<span class="gt lv">${TOPICS[v.t]}</span><span class="gt lv">JLPT ${v.l}</span></div></div>
+    <button class="btn" id="pclose">Close</button></div>
+    <div class="ex"><div class="lbl">Example</div><div class="jp" lang="ja">${x[0]}</div><div class="kh kana" lang="ja" style="font-weight:400;font-size:14px;color:var(--muted)">${x[1]}</div><div class="kr romaji">${esc(x[2])}</div><div class="ke">${esc(x[3])}</div></div>
+    ${nt.length?`<ul class="notes">${nt.map(n=>`<li>${n}</li>`).join("")}</ul>`:""}
+    <div class="toggles"><span>Show:</span><button class="tg" data-t="kana">Hiragana</button><button class="tg" data-t="romaji">Rōmaji</button><button class="tg" data-t="en">English</button><span>Hide a column to test yourself.</span></div>
+    <div class="tw"><table><tbody>${rows}</tbody></table></div>
+    <div class="pnav"><button class="btn" id="pprev" ${pos>0?"":"disabled"}>← Previous</button><button class="btn primary" id="ppractise">Practise this verb</button><button class="btn" id="pnext" ${pos>=0&&pos<list.length-1?"":"disabled"}>Next →</button></div>`;
+  ov.hidden=false;panel.scrollTop=0;document.body.style.overflow="hidden";
+  wireToggles(panel);
+  $("pclose").onclick=closeV;
+  $("pprev").onclick=()=>openV(list[pos-1].i);$("pnext").onclick=()=>openV(list[pos+1].i);
+  $("ppractise").onclick=()=>{closeV();showTab("drill");dVerbs.value="v"+v.i;startDrill()};
+  $("pclose").focus();
+}
+function closeV(){ov.hidden=true;document.body.style.overflow="";if(lastFocus)lastFocus.focus()}
+ov.addEventListener("click",e=>{if(e.target===ov)closeV()});
+document.addEventListener("keydown",e=>{if(ov.hidden)return;if(e.key==="Escape")closeV();
+  const pos=list.findIndex(y=>y.i===cur);if(e.key==="ArrowRight"&&pos>=0&&pos<list.length-1)openV(list[pos+1].i);if(e.key==="ArrowLeft"&&pos>0)openV(list[pos-1].i)});
+const shown={kana:store.get("vb-kana")!=="0",romaji:store.get("vb-romaji")!=="0",en:store.get("vb-en")!=="0"};
+function applyShown(){Object.keys(shown).forEach(t=>document.documentElement.classList.toggle("hide-"+t,!shown[t]))}
+function wireToggles(root){root.querySelectorAll(".tg").forEach(b=>{const t=b.dataset.t;b.setAttribute("aria-pressed",shown[t]);
+  b.onclick=()=>{shown[t]=!shown[t];store.set("vb-"+t,shown[t]?"1":"0");b.setAttribute("aria-pressed",shown[t]);applyShown()}})}
+applyShown();
+
+/* ---------- Tabs ---------- */
+function showTab(t){["verbs","drill"].forEach(n=>{$("t-"+n).setAttribute("aria-selected",n===t);$("v-"+n).hidden=n!==t});store.set("vb-tab",t);if(t==="drill"&&!$("d-card").innerHTML)startDrill()}
+$("t-verbs").onclick=()=>showTab("verbs");$("t-drill").onclick=()=>showTab("drill");
+
+/* ---------- Drill ---------- */
+const dMode=$("d-mode"),dForms=$("d-forms"),dVerbs=$("d-verbs");
+const CATS=[...new Set(FORMS.map(f=>f.cat))];
+dForms.innerHTML=`<option value="all">All ${FORMS.length} forms</option>`+CATS.map(c=>`<option value="${esc(c)}">${c}</option>`).join("");
+dVerbs.innerHTML=`<option value="all">All verbs</option><optgroup label="By group"><option value="g1">Group 1</option><option value="g2">Group 2</option><option value="g3">Group 3 (irregular)</option></optgroup><optgroup label="By topic">${Object.entries(TOPICS).map(([k,l])=>`<option value="t${k}">${l}</option>`).join("")}</optgroup><optgroup label="One verb">${VERBS.filter(v=>!v.noDrill).map(v=>`<option value="v${v.i}">${v.k} (${v.h}) · ${esc(meaning(v))}</option>`).join("")}</optgroup>`;
+[["d-mode","make"],["d-forms","all"],["d-verbs","all"]].forEach(([id,d])=>{const s=store.get("vb-"+id),el=$(id);el.value=s&&[...el.options].some(o=>o.value===s)?s:d});
+const st={right:0,total:0,streak:0,best:+(store.get("vb-best")||0),missed:[]};
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function vPool(){const s=dVerbs.value;return VERBS.filter(v=>!v.noDrill||s==="v"+v.i).filter(v=>s==="all"||(s[0]==="g"&&v.g==+s[1])||(s[0]==="t"&&v.t===s.slice(1))||(s[0]==="v"&&v.i==+s.slice(1)))}
+function fPool(){return dForms.value==="all"?FORMS:FORMS.filter(f=>f.cat===dForms.value)}
+function updScore(){$("d-score").innerHTML=`<span>Correct <b>${st.right}</b> / ${st.total}</span><span>Streak <b>${st.streak}</b></span><span>Best streak <b>${st.best}</b></span>`}
+function startDrill(){[["d-mode",dMode],["d-forms",dForms],["d-verbs",dVerbs]].forEach(([id,el])=>store.set("vb-"+id,el.value));st.right=st.total=st.streak=0;st.missed=[];renderMissed();updScore();newQ()}
+[dMode,dForms,dVerbs].forEach(el=>el.addEventListener("change",startDrill));
+const formCell=c=>`<span class="fk" lang="ja">${c.k}</span><span class="fh" lang="ja">${c.h}</span><span class="fr">${c.r}</span>`;
+function newQ(){
+  const vp=vPool(),fp=fPool();let v,f,n=0;
+  do{v=rnd(vp);f=rnd(fp);n++}while(!usable(v,f)&&n<500);
+  if(!usable(v,f)){$("d-card").innerHTML=`<p class="empty">These verbs are not normally used in these forms. Choose other forms or verbs.</p>`;return}
+  const ans=conj(v,f),mode=dMode.value==="mix"?rnd(["make","name"]):dMode.value;
+  let opts,ask,isRight;
+  if(mode==="make"){
+    const seen=new Set([ans.h]),ds=[];
+    for(const g of [...shuffle(fp.filter(g=>g!==f&&usable(v,g))),...shuffle(FORMS.filter(g=>g!==f&&usable(v,g)))]){const c=conj(v,g);if(!seen.has(c.h)){seen.add(c.h);ds.push(c)}if(ds.length===3)break}
+    opts=shuffle([ans,...ds]).map(o=>({html:formCell(o),ok:o===ans}));
+    ask=`<div class="qv"><span class="pbig" lang="ja">${v.k}</span><div><div class="kana" lang="ja">${v.h}</div><div class="romaji">${v.dr}</div><div class="en">to ${esc(meaning(v))}</div></div></div>
+      <div class="qask">Choose the <b lang="ja">${f.jp}</b> form <span style="color:var(--muted)">(${f.en})</span>.</div>`;
+  }else{
+    const ds=shuffle(FORMS.filter(g=>g!==f&&usable(v,g)&&conj(v,g).h!==ans.h)).slice(0,3);
+    opts=shuffle([f,...ds]).map(g=>({html:`<span class="fn" lang="ja">${g.jp}</span><span class="fe">${g.en}</span>`,ok:g===f}));
+    ask=`<div class="qv"><div>${formCell(ans).replace('class="fk"','class="fk pbig" style="font-size:clamp(28px,7vw,40px)"')}</div><div><div class="romaji">from <span lang="ja">${v.k}</span> (${v.h})</div><div class="en">to ${esc(meaning(v))}</div></div></div>
+      <div class="qask">Which form is this?</div>`;
+  }
+  const card=$("d-card");
+  card.innerHTML=ask+`<div class="opts">${opts.map((o,i)=>`<button class="opt" data-i="${i}">${o.html}</button>`).join("")}</div><div class="fb" id="d-fb"></div><div class="row"><button class="btn primary" id="d-next" hidden>Next question</button></div>`;
+  card.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+    const ok=opts[+b.dataset.i].ok;st.total++;
+    if(ok){st.right++;st.streak++;if(st.streak>st.best){st.best=st.streak;store.set("vb-best",st.best)}}else{st.streak=0;st.missed=[{v,f,c:ans},...st.missed.filter(m=>!(m.v===v&&m.f===f))].slice(0,8);renderMissed()}
+    updScore();
+    card.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(opts[+x.dataset.i].ok)x.classList.add("right")});
+    if(!ok)b.classList.add("wrong");
+    const fb=$("d-fb");fb.className="fb "+(ok?"ok":"no");
+    fb.innerHTML=(ok?"正解！ Correct. ":`Not quite. `)+`<b lang="ja">${ans.k}</b> (${ans.r}) is the <span lang="ja">${f.jp}</span> form: <i>${esc(ans.en)}</i>.`;
+    const nx=$("d-next");nx.hidden=false;nx.focus();nx.onclick=newQ;
+  });
+}
+function renderMissed(){$("d-missed").hidden=!st.missed.length;
+  $("d-mlist").innerHTML=st.missed.map(m=>`<li><span class="fk" lang="ja">${m.c.k}</span><span class="fr">${m.c.r}</span><span class="fe"><span lang="ja">${m.f.jp}</span> of <span lang="ja">${m.v.k}</span> · ${esc(m.c.en)}</span></li>`).join("")}
+
+/* ---------- Start ---------- */
+render();updScore();
+if(store.get("vb-tab")==="drill")showTab("drill");
+</script>
+<script>
+if("serviceWorker" in navigator&&location.protocol!=="file:"){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))}
+</script>
+</body>
+</html>
